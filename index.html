@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two-Plant Economic Dispatch — Power Systems Course Project</title>
+<meta name="description" content="Interactive calculator for the classical two-plant base/peak load economic dispatch problem, using the straight-line load duration curve method.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grid-backdrop" aria-hidden="true"></div>
+
+<header class="topbar">
+  <span class="topbar__tag">POWER SYSTEMS ENGINEERING</span>
+  <span class="topbar__tag topbar__tag--muted">COURSE PROJECT</span>
+</header>
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <p class="eyebrow">Economic Load Dispatch &middot; Two-Plant System</p>
+    <h1 class="headline">Base plant. Peak plant.<br>Which is which?</h1>
+    <p class="subhead">
+      A utility meets its load using two heterogeneous plants — one expensive to build
+      but cheap to run, the other cheap to build but expensive to run. This tool
+      identifies which plant should be run as the <strong>base load plant</strong> and
+      which as the <strong>peak load plant</strong>, and works out how many hours a
+      year the peaking plant should actually operate.
+    </p>
+  </section>
+
+  <!-- ===================== PROBLEM ===================== -->
+  <section class="panel problem">
+    <div class="problem__text">
+      <h2 class="section-title">The problem</h2>
+      <p>
+        The utility must meet a fluctuating annual load using two heterogeneous plants.
+        Plant 1 costs <code>C1</code> rupees per kW per year to install and <code>R1</code>
+        paise per kWh to run; Plant 2 costs <code>C2</code> per kW per year and <code>R2</code>
+        paise per kWh. Because the two plants trade fixed cost against running cost, the
+        cheapest overall system uses the plant with the higher fixed / lower running cost as
+        the <strong>base load plant</strong> (running nearly all 8760 hours of the year), and
+        the plant with lower fixed / higher running cost as the <strong>peak load plant</strong>
+        (running only during the highest hours of demand).
+      </p>
+      <p>
+        Modelling the annual load duration curve as a straight line and minimising total
+        annual cost with respect to the base/peak switch-over point gives a clean,
+        closed-form answer for how many hours the peaking plant should actually run —
+        it depends only on the cost figures, not on the region's demand or load factor:
+      </p>
+    </div>
+    <div class="formula-card">
+      <span class="formula-card__label">OPTIMAL PEAK-PLANT HOURS</span>
+      <div class="formula-card__eq">t&#8321; = (C<sub>base</sub> &minus; C<sub>peak</sub>) / (R<sub>peak</sub> &minus; R<sub>base</sub>)</div>
+      <p class="formula-card__note">C in Rs / kW / year&nbsp;&middot;&nbsp;R in Rs / kWh&nbsp;&middot;&nbsp;t&#8321; in hours / year</p>
+    </div>
+  </section>
+
+  <!-- ===================== INPUTS ===================== -->
+  <section class="panel inputs">
+    <h2 class="section-title">Plant cost data</h2>
+    <p class="section-sub">Fill in the fixed and running cost of each plant.</p>
+
+    <form id="dispatchForm">
+      <fieldset class="field-group field-group--plant">
+        <legend><span class="legend-dot legend-dot--base"></span> Plant 1</legend>
+        <div class="field">
+          <label for="c1">Fixed cost</label>
+          <div class="field__input"><input type="number" id="c1" min="0" step="any" value="1600" required><span class="unit">Rs/kW/yr</span></div>
+        </div>
+        <div class="field">
+          <label for="r1">Running cost</label>
+          <div class="field__input"><input type="number" id="r1" min="0" step="any" value="10" required><span class="unit">paise/kWh</span></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group field-group--plant">
+        <legend><span class="legend-dot legend-dot--peak"></span> Plant 2</legend>
+        <div class="field">
+          <label for="c2">Fixed cost</label>
+          <div class="field__input"><input type="number" id="c2" min="0" step="any" value="400" required><span class="unit">Rs/kW/yr</span></div>
+        </div>
+        <div class="field">
+          <label for="r2">Running cost</label>
+          <div class="field__input"><input type="number" id="r2" min="0" step="any" value="45" required><span class="unit">paise/kWh</span></div>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn-compute">Identify base &amp; peak plant</button>
+      <p class="form-error" id="formError" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- ===================== RESULTS ===================== -->
+  <section class="panel results" id="resultsPanel">
+    <h2 class="section-title">Result</h2>
+    <div class="readout-grid" id="readoutGrid"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Assumption: the annual load duration curve is approximated as a straight line, over 8760 operating hours per year.</p>
+  <p class="site-footer__meta">Built for a Power Systems Engineering course project · calculations run entirely in your browser</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
